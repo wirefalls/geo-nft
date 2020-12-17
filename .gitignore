@@ -1,0 +1,6 @@
+countrysets/
+*.nft
+*.ipv4
+*.ipv6
+*.csv
+*.gz
