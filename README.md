@@ -49,12 +49,12 @@ If you're a package maintainer, feel free to contact us if you have any question
 ##### Maintainer
 * Wirefalls - [GitHub.com/wirefalls](https://github.com/wirefalls)
 
-Please see the ***GeoIP for nftables*** [Copyright Notice](https://github.com/wirefalls/geoip/wiki/Copyright).
-Special thanks to the [nftables project](https://netfilter.org/projects/nftables/) for creating a robust firewall framework.
-[IP Geolocation by DB-IP - https://db-ip.com](https://db-ip.com)
-Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspberrypi.org/).
-Photos used to create the ***GeoIP for nftables*** header image courtesy of [NASA Visible Earth](https://visibleearth.nasa.gov).
-All trademarks, logos and copyrights are the property of their respective owners.
+Please see the ***GeoIP for nftables*** [Copyright Notice](https://github.com/wirefalls/geoip/wiki/Copyright).  
+Special thanks to the [nftables project](https://netfilter.org/projects/nftables/) for creating a robust firewall framework.  
+[IP Geolocation by DB-IP - https://db-ip.com](https://db-ip.com)  
+Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspberrypi.org/).  
+Photos used to create the ***GeoIP for nftables*** header image courtesy of [NASA Visible Earth](https://visibleearth.nasa.gov).  
+All trademarks, logos and copyrights are the property of their respective owners.  
 
 ### References
 
