@@ -58,10 +58,10 @@ All trademarks, logos and copyrights are the property of their respective owners
 
 ### References
 
-https://netfilter.org/projects/nftables/
-https://wiki.nftables.org/wiki-nftables/index.php/Main_Page
-http://netfilter.org/mailinglists.html#ml-user
-https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-https://db-ip.com/db/lite.php
-https://db-ip.com/faq.php
-https://unstats.un.org/unsd/methodology/m49/overview
+https://netfilter.org/projects/nftables/  
+https://wiki.nftables.org/wiki-nftables/index.php/Main_Page  
+http://netfilter.org/mailinglists.html#ml-user  
+https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2  
+https://db-ip.com/db/lite.php  
+https://db-ip.com/faq.php  
+https://unstats.un.org/unsd/methodology/m49/overview  
