@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geoip_ver=v1.0.0
+geoip_ver=v1.0.1
 
 # Filename of this script.
 script_name="geoip-nft.sh"

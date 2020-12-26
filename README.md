@@ -17,7 +17,7 @@
 * Packets can be GeoIP filtered with a single nftables rule rather than two rules to mark and match packets like nftables map based solutions.
 * The script allows access to all of the valid country code address ranges in the database.
 * Automatically determines your installed version of nftables and recommends the correct "include" statements for your ruleset. The script also creates "include-all" files to allow you to include all GeoIP sets with a single reference on older versions of nftables that don't support include wildcards.
-* The [User Guide](https://github.com/wirefalls/geoip/wiki/User-Guide) explains how to define all element definitions for Geo IP sets in one file, eliminating the chance of having out-of-sync definitions in multiple files when flushing and refilling sets with new data.
+* The [User Guide](https://github.com/wirefalls/geoip/wiki/User-Guide) explains how to define all element definitions for GeoIP sets in one file, eliminating the chance of having out-of-sync definitions in multiple files when flushing and refilling sets with new data.
 * Simplified directory structure to shorten "include" path names.
 * The script creates ~500 IPv4 and IPv6 set files from the GeoIP database in about 10 seconds on a low power quad-core 2200ge server with SSD storage.
 * Tested on [Ubuntu Server](https://ubuntu.com/server), [Fedora Server](https://getfedora.org/en/server/), and [Raspberry Pi OS](https://www.raspberrypi.org/downloads/raspberry-pi-os/).
@@ -36,14 +36,17 @@ The [Installation Guide](https://github.com/wirefalls/geoip/wiki/Installation-Gu
 
 #### Usage
 The [User Guide](https://github.com/wirefalls/geoip/wiki/User-Guide) explains how to configure your ruleset for GeoIP filtering.
+
+#### Discussions
+Please see our [Discussions Page](https://github.com/wirefalls/geoip/discussions) to share ideas or ask questions about ***GeoIP for nftables***.
 &nbsp;
 ### License
 ***GeoIP for nftables*** is licensed under the [GNU GPLv2](./LICENSE) (or at your option, any later version).
 
 ### Contributing
-Please see the [Contributing Guide](https://github.com/wirefalls/geoip/wiki/Contributing) for information on how you can help.
-
-If you're a package maintainer, feel free to contact us if you have any questions.
+* You can help us by spreading the good word about ***GeoIP for nftables*** online.
+* Please see the [Contributing Guide](https://github.com/wirefalls/geoip/wiki/Contributing) for more information on how you can help.
+* If you're a package maintainer, feel free to contact us if you have any questions.
 
 ### Credits
 ##### Maintainer
