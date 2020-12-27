@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geoip_ver=v1.0.1
+geoip_ver=v1.0.2
 
 # Filename of this script.
 script_name="geoip-nft.sh"
@@ -637,7 +637,7 @@ main() {
 		fi
 	fi
 
-#   Print a notice on how to include all GeoIP sets based on the installed nftables version.
+	# Print a notice on how to include all GeoIP sets based on the installed nftables version.
 	print_notice
 
 	# Display the script run time.
