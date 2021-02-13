@@ -1,0 +1,11 @@
+# /etc/systemd/system/geo-update.service
+[Unit]
+Description=Update database - Geolocation for nftables
+Documentation=https://github.com/wirefalls/geo-nft/wiki
+Wants=network-online.target time-sync.target
+After=network-online.target time-sync.target
+
+[Service]
+Type=oneshot
+StandardError=journal
+ExecStart=/usr/sbin/geo-nft -s

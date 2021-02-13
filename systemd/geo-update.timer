@@ -1,7 +1,7 @@
-# /etc/systemd/system/geoip-update.timer
+# /etc/systemd/system/geo-update.timer
 [Unit]
-Description=Update database monthly - GeoIP for nftables
-Documentation=https://github.com/wirefalls/geoip/wiki
+Description=Update database monthly - Geolocation for nftables
+Documentation=https://github.com/wirefalls/geo-nft/wiki
 
 [Timer]
 # Set update time to midnight on the second day of each month.
