@@ -1,6 +1,8 @@
 countrysets/
-*.nft
-*.ipv4
-*.ipv6
+*.bak
+*.conf
 *.csv
 *.gz
+*.ipv4
+*.ipv6
+*.nft
