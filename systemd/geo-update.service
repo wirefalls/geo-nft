@@ -1,4 +1,5 @@
 # /etc/systemd/system/geo-update.service
+# https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Unit]
 Description=Update database - Geolocation for nftables
 Documentation=https://github.com/wirefalls/geo-nft/wiki
