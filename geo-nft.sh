@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.6
+geo_nft_ver=v2.0.7
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -315,9 +315,12 @@ check_programs() {
 
 	for p in $reqd_programs
 	do
-		command -v $p > /dev/null 2>&1
+		command -v "$p" > /dev/null 2>&1
 		if [ ! $? -eq 0 ]; then
 			error_log "This script requires the '$p' program, not found in \$PATH. Exiting..."
+			if [ "$p" = "nft" ]; then
+				error_log "The 'nft' program is part of the 'nftables' package."
+			fi
 			exit 1
 		fi
 	done
