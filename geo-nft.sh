@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.5
+geo_nft_ver=v2.0.6
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -533,7 +533,7 @@ make_sets_db() {
 				# Verify that the set being generated has at least one element, otherwise skip it.
 				if [ $element_count6 -eq 0 ]; then
 					rm -f "$cc_dir/$line.ipv6"
-					printf '%s\n' "No IPv6 addresses in database for country code $line, skipping..."
+					print_line "No IPv6 addresses in database for country code $line, skipping..." "\n"
 					continue
 				else
 					if [ "$enable_include_all" = "yes" ]; then
