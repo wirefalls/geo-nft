@@ -1,8 +1,5 @@
 <img height=auto width=100% src="./media/geo-earth.jpg" alt="Geolocation for nftables">
 
-## Geolocation for nftables
-The project name changed recently. If you have v1.0.x of the script please see the [Name Change](https://github.com/wirefalls/geo-nft/wiki/Name-Change) notice in the Wiki for instructions on how to upgrade to the latest version.
-
 ### Introduction
 
 &nbsp; &nbsp;***Geolocation for nftables*** is a Bash script to create nftables sets of country specific IP address ranges for use with firewall rulesets. The project provides a simple and flexible way to implement geolocation filtering with [nftables](https://netfilter.org/projects/nftables/).
@@ -20,7 +17,7 @@ The project name changed recently. If you have v1.0.x of the script please see t
 * Automatically determines your installed version of nftables and recommends the correct "include" statements for your ruleset. The script also creates "include-all" files to allow you to include all geolocation sets with a single reference on older versions of nftables that don't support include wildcards.
 * The [User Guide](https://github.com/wirefalls/geo-nft/wiki/User-Guide) explains how to define all element definitions for geolocation sets in one file, eliminating the chance of having out-of-sync definitions in multiple files when flushing and refilling sets with new data.
 * Simplified directory structure to shorten "include" path names.
-* The script creates ~500 IPv4 and IPv6 set files from the geolocation database in about 10 seconds on a low power quad-core 2200ge server with SSD storage.
+* The script creates ~500 IPv4 and IPv6 set files from the geolocation database in about 11 seconds on a low power quad-core 2200ge server with SSD storage.
 * Tested on [Ubuntu Server](https://ubuntu.com/server), [Fedora Server](https://getfedora.org/en/server/), and [Raspberry Pi OS](https://www.raspberrypi.org/downloads/raspberry-pi-os/).
 
 If you find ***Geolocation for nftables*** useful, please consider giving us a **Star** at the top of the page.
@@ -38,14 +35,26 @@ The [Installation Guide](https://github.com/wirefalls/geo-nft/wiki/Installation-
 #### Usage
 The [User Guide](https://github.com/wirefalls/geo-nft/wiki/User-Guide) explains how to configure your ruleset for geolocation filtering.
 
+#### Dependencies
+Bash 4.0 or newer.
+nftables v0.9.0 or newer.
+awk, curl, grep, gunzip, sed, sort, stat
+
 #### Discussions
-Please see our [Discussions Page](https://github.com/wirefalls/geo-nft/discussions) to share ideas or ask questions about ***Geolocation for nftables***.
+Please see our [Discussions Page](https://github.com/wirefalls/geo-nft/discussions) to share ideas or ask questions about the project.
+
+#### Around the Web
+Feature Article - LinuxSecurity.com
+[Geolocation for nftables Brings Simplicity & Flexibility to Geolocation Matching](https://linuxsecurity.com/features/features/geolocation-for-nftables)
+
+Slashdot.org
+[Should You Block Connections to Your Network From Foreign Countries?](https://news.slashdot.org/story/21/02/13/2231248/should-you-block-connections-to-your-network-from-foreign-countries)
 &nbsp;
 ### License
 ***Geolocation for nftables*** is licensed under the [GNU GPLv2](./LICENSE) (or at your option, any later version).
 
 ### Contributing
-* You can help us by spreading the good word about ***Geolocation for nftables*** online.
+* You can help us by spreading the good word about the project online.
 * Please see the [Contributing Guide](https://github.com/wirefalls/geo-nft/wiki/Contributing) for more information on how you can help.
 * If you're a package maintainer, feel free to contact us if you have any questions.
 
@@ -57,7 +66,7 @@ Please see the ***Geolocation for nftables*** [Copyright Notice](https://github.
 Special thanks to the [nftables project](https://netfilter.org/projects/nftables/) for creating a robust firewall framework.  
 [IP Geolocation by DB-IP - https://db-ip.com](https://db-ip.com)  
 Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspberrypi.org/).  
-Photos used to create the ***Geolocation for nftables*** header image courtesy of [NASA Visible Earth](https://visibleearth.nasa.gov).  
+Photos used to create the header image courtesy of [NASA Visible Earth](https://visibleearth.nasa.gov).  
 All trademarks, logos and copyrights are the property of their respective owners.  
 
 ### References
