@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.4
+geo_nft_ver=v2.0.5
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -48,13 +48,17 @@ datetime="$(date +"%Y-%m-%d %H:%M:%S")"
 base_dir="/etc/nftables/geo-nft"
 
 
-# Allow script output to be suppressed when run as a service.
-# Call the script with the -s argument to run silent.
-if [ "$#" -eq 1 ] && [ "$1" = "-s" ]; then
-	silent="yes"
-else
-	silent="no"
-fi
+# Check for command line arguments and process them.
+for val in "$@"
+do
+	if [ "$val" = "-s" ]; then
+		# Allow script output to be suppressed when run as a service.
+		# Call the script with the -s argument to run silent.
+		silent="yes"
+	else
+		printf "\n%s\n" "Command line argument invalid: $val"
+	fi
+done
 
 # Set user settings to default values.
 set_defaults() {
