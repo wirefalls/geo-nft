@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.9
+geo_nft_ver=v2.0.10
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -153,8 +153,9 @@ make_config() {
 	printf '%s\n' "# Enable the creation of IPv6 country sets (yes/no)." >> $geo_conf
 	printf '%s\n' "enable_ipv6=$enable_ipv6" >> $geo_conf
 	printf '\n\n' >> $geo_conf
-	printf '%s\n' "# Define the base directory where the geo-nft.sh" >> $geo_conf
-	printf '%s\n' "# script is located and writes it's files to." >> $geo_conf
+	printf '%s\n' "# Define the base directory where the $script_name script" >> $geo_conf
+	printf '%s\n' "# is located and writes it's files to. Avoid pathnames" >> $geo_conf
+	printf '%s\n' "# with spaces, links or special characters." >> $geo_conf
 	printf '%s\n' "# Default: /etc/nftables/geo-nft" >> $geo_conf
 	printf '%s\n' "base_dir=$base_dir" >> $geo_conf
 	printf '\n' >> $geo_conf
