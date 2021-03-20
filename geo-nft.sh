@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.8
+geo_nft_ver=v2.0.9
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -111,7 +111,7 @@ error_log() {
 		fi
 		# Write error messages to the error log file.
 		printf '%s\n' "[$datetime]" >> $errorlog
-		print_line "\n" "$script_name:" "\n"
+		print_line "\n" "$script_name $geo_nft_ver:" "\n"
 		for err in "$@"
 		do
 			print_line "\t" "$err" "\n"
