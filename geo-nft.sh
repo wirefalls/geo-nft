@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.10
+geo_nft_ver=v2.0.11
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -128,15 +128,18 @@ error_log() {
 make_config() {
 	print_line "\n" "Creating user configuration file: $geo_conf" "\n"
 
-	# Check present working directory for the existence of the geo-nft.sh script.
-	# If found, set the base_dir variable to the present working directory, and also
-	# set the base_dir variable in /etc/geo-nft.conf.
-	if [ -s "$PWD/$script_name" ]; then
-		base_dir=$PWD
-	else
-		error_log "Create user config: Unable to find $script_name in $PWD  Exiting..." \
-					"Change directory (cd) to the base geo-nft directory and run this script again."
-		exit 1
+	# Check the base_dir directory first for the existence of the geo-nft.sh script. If not
+	# found then check present working directory for the script. If found there then set the
+	# base_dir variable to the present working directory, which sets the base_dir variable
+	# in /etc/geo-nft.conf as well.
+	if [ ! -s "$base_dir/$script_name" ]; then
+		if [ -s "$PWD/$script_name" ]; then
+			base_dir=$PWD
+		else
+			error_log "Create user config: Unable to find $script_name in $PWD  Exiting..." \
+				"Change directory (cd) to the base geo-nft directory and run this script again."
+			exit 1
+		fi
 	fi
 
 	printf '%s\n' "# Geolocation for nftables configuration file" > $geo_conf
