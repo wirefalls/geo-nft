@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.0.11
+geo_nft_ver=v2.0.12
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -216,7 +216,7 @@ check_config() {
 		# Import the value for base_dir. Remove double quotes and tabs, trailing slashes, leading and
 		# trailing single quotes and blank spaces, and don't change case of pathname.
 		value=$(grep -Po 'base_dir=\K.*' $geo_conf | sed "s/[\"\t]//g; s:/*$::; s/^[' ]*//; s/[' ]*$//")
-		if [ ! -z "$value" ] && [ -d "$value" ]; then
+		if [ -n "$value" ] && [ -d "$value" ]; then
 			if [ -s "$value/$script_name" ]; then
 				base_dir="$value"
 			else
@@ -249,7 +249,7 @@ check_config() {
 		# Import the value for refill_file. Remove single/double quotes, tabs, leading and trailing blanks and
 		# don't change case of filename.
 		value=$(grep -Po 'refill_file=\K.*' $geo_conf | sed "s/[\"\t/]//g; s/^[' ]*//; s/[' ]*$//")
-		if [ ! -z "$value" ]; then
+		if [ -n "$value" ]; then
 			refill_file="$value"
 		fi
 
@@ -292,10 +292,10 @@ check_dir() {
 			exit 1
 		fi
 	else
-		if [ ! -z "$1" ]; then
+		if [ -n "$1" ]; then
 			if [ "$2" = "-c" ]; then
 				print_line "\n" "The $1 directory doesn't exist, creating..." "\n"
-				mkdir -p $1
+				mkdir -p "$1"
 			fi
 			if [ -d "$1" ]; then
 				if [ ! -w "$1" ]; then
@@ -368,7 +368,7 @@ flush_refill_sets() {
 	# Run the refill script defined by $refill_file above. The 'enable_refill' variable must
 	# be set to "yes" for this to work. 
 	if [ "$enable_refill" = "yes" ]; then
-		if [ ! -z "$base_dir/$refill_file" ] && [ -s "$base_dir/$refill_file" ]; then
+		if [ -n "$base_dir/$refill_file" ] && [ -s "$base_dir/$refill_file" ]; then
 			print_line "\n" "Refilling updated country-specific sets by running the script:" "\n"
 			print_line "$base_dir/$refill_file" "\n"
 			nft -f "$base_dir/$refill_file"
@@ -389,20 +389,25 @@ flush_refill_sets() {
 # IP Geolocation by DB-IP  https://db-ip.com  Licensed under
 # (CC BY-SA 4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode
 download_db() {
-	cd $base_dir
+	if [ -s "$base_dir/$script_name" ]; then
+		cd "$base_dir"
+	else
+		error_log "The base directory defined in $geo_conf doesn't contain '$script_name', exiting..."
+		exit 1
+	fi
 
 	if [ ! -s "$dbip_csv" ]; then
 		print_line "\n" "Downloading the free geolocation database from https://db-ip.com." "\n"
 		print_line "IP Geolocation by DB-IP  https://db-ip.com  Licensed under" "\n"
 		print_line "(CC BY-SA 4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode" "\n" "\n"
 		if [ "$silent" = "yes" ]; then
-			curl -f -L -O -s -S $dbip_url
+			curl -f -L -O -s -S "$dbip_url"
 			if [ $? -ne 0 ]; then
 				error_log "Failed to download $dbip_url. Exiting..."
 				exit 1
 			fi
 		else
-			curl -f -L -O $dbip_url
+			curl -f -L -O "$dbip_url"
 			if [ $? -ne 0 ]; then
 				error_log "Failed to download $dbip_url. Exiting..."
 				exit 1
@@ -411,7 +416,7 @@ download_db() {
 		if [ -s "$dbip_gz" ]; then
 			# The download was successful.
 			rm -f dbip-country-lite-*.csv
-			gunzip -f $dbip_gz
+			gunzip -f "$dbip_gz"
 			if [ $? -ne 0 ] || [ ! -s "$dbip_csv" ]; then
 				# The gunzip failed so error out.
 				error_log "Failed to unzip $dbip_gz. Exiting..."
@@ -436,10 +441,10 @@ make_sets_db() {
 		# Filter out only the 'ZZ' country code used for 'no location and owner' since it isn't valid.
 		# https://db-ip.com/faq.php
 		print_line "\n" "Creating a list of all country codes found in the database csv file." "\n" "\n"
-		local cc_list_array=($(awk -F"," '{ print $3 }' $dbip_csv | sort -u | sed -e '/ZZ/d'))
+		local cc_list_array=($(awk -F"," '{ print $3 }' "$dbip_csv" | sort -u | sed -e '/ZZ/d'))
 
 		# Verify that the $cc_list_array list exists and has at least 200 elements.
-		if [ ! $cc_list_array ] || [ ${#cc_list_array[@]} -lt 200 ]; then
+		if [ ! "$cc_list_array" ] || [ ${#cc_list_array[@]} -lt 200 ]; then
 			error_log "The country code list 'cc_list_array' is missing or incomplete. Exiting..."
 			exit 1
 		fi
@@ -451,7 +456,7 @@ make_sets_db() {
 		print_line "Some countries may only have IPv4 addresses or IPv6 addresses." "\n" "\n"
 
 		# Clear the 'countrysets' directory.
-		rm -f $cc_dir/*
+		rm -f "$cc_dir"/*
 
 		if [ "$enable_include_all" != "yes" ]; then
 			# The enable_include_all variable is not set to yes, so remove any include-all files if they exist.
@@ -481,11 +486,11 @@ make_sets_db() {
 			do
 				# Count the number of elements in the new set file.
 				# If the starting and ending IP address are equal, list them as a single address for nftables compatibility.
-				local element_count4=$(grep $line $dbip_csv | grep -v : | \
+				local element_count4=$(grep "$line" "$dbip_csv" | grep -v : | \
 					awk -F"," '{ if ($1==$2) print "\t" $1 ","; else print "\t" $1 "," $2 "," fi }' | grep -o "," | awk 'END{print NR}')
 
 				# Verify that the set being generated has at least one element, otherwise skip it.
-				if [ $element_count4 -eq 0 ]; then
+				if [ "$element_count4" -eq 0 ]; then
 					rm -f "$cc_dir/$line.ipv4"
 					print_line "No IPv4 addresses in database for country code $line, skipping..." "\n"
 					continue
@@ -497,27 +502,27 @@ make_sets_db() {
 				fi
 
 				# Add the file header text and db-ip.com license information.
-				printf '%s\n' "# Generated by $script_name $geo_nft_ver" > $cc_dir/$line.ipv4
-				printf '%s\n' "# $(date)" >> $cc_dir/$line.ipv4
-				printf '%s\n' "# IP Geolocation by DB-IP  https://db-ip.com  Licensed under" >> $cc_dir/$line.ipv4
-				printf '%s\n' "# (CC BY-SA 4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode" >> $cc_dir/$line.ipv4
+				printf '%s\n' "# Generated by $script_name $geo_nft_ver" > "$cc_dir/$line.ipv4"
+				printf '%s\n' "# $(date)" >> "$cc_dir/$line.ipv4"
+				printf '%s\n' "# IP Geolocation by DB-IP  https://db-ip.com  Licensed under" >> "$cc_dir/$line.ipv4"
+				printf '%s\n' "# (CC BY-SA 4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode" >> "$cc_dir/$line.ipv4"
 
 				# Add the element count and country code used to create this set.
-				printf '%s\n' "# Country code used to create this set: $line" >> $cc_dir/$line.ipv4
-				printf '%s\n\n' "# Number of elements in this set: $element_count4" >> $cc_dir/$line.ipv4
+				printf '%s\n' "# Country code used to create this set: $line" >> "$cc_dir/$line.ipv4"
+				printf '%s\n\n' "# Number of elements in this set: $element_count4" >> "$cc_dir/$line.ipv4"
 
 				# Add the 'define' set line.
-				printf '%s\n' "define $line.ipv4 = {" >> $cc_dir/$line.ipv4
+				printf '%s\n' "define $line.ipv4 = {" >> "$cc_dir/$line.ipv4"
 
 				# Grep the geolocation database file for country code matches for the current $line.
 				# If the starting and ending IP address are equal, list them as a single address for nftables compatibility.
 				# sed removes the comma on the last line of the element list.
-				grep $line $dbip_csv | grep -v : | \
+				grep "$line" "$dbip_csv" | grep -v : | \
 					awk -F"," '{ if ($1==$2) print "\t" $1 ","; else print "\t" $1 "-" $2 "," fi }' | \
-						sed '$s/,$//' >> $cc_dir/$line.ipv4
+						sed '$s/,$//' >> "$cc_dir/$line.ipv4"
 
 				# Add the closing brace to the output file.
-				printf '%s' "}" >> $cc_dir/$line.ipv4
+				printf '%s' "}" >> "$cc_dir/$line.ipv4"
 			done
 
 			if [ "$enable_include_all" = "yes" ]; then
@@ -525,7 +530,7 @@ make_sets_db() {
 				printf "%s\n" "${include_all4_array[@]}" > "$include_file4"
 			fi
 		else
-			rm -f $cc_dir/*.ipv4
+			rm -f "$cc_dir"/*.ipv4
 			rm -f "$include_file4"
 		fi
 
@@ -551,11 +556,11 @@ make_sets_db() {
 			do
 				# Count the number of elements in the new set file.
 				# If the starting and ending IP address are equal, list them as a single address for nftables compatibility.
-				local element_count6=$(grep $line $dbip_csv | grep : | \
+				local element_count6=$(grep "$line" "$dbip_csv" | grep : | \
 					awk -F"," '{ if ($1==$2) print "\t" $1 ","; else print "\t" $1 "," $2 "," fi }' | grep -o "," | awk 'END{print NR}')
 
 				# Verify that the set being generated has at least one element, otherwise skip it.
-				if [ $element_count6 -eq 0 ]; then
+				if [ "$element_count6" -eq 0 ]; then
 					rm -f "$cc_dir/$line.ipv6"
 					print_line "No IPv6 addresses in database for country code $line, skipping..." "\n"
 					continue
@@ -567,24 +572,24 @@ make_sets_db() {
 				fi
 
 				# Add the file header text and db-ip.com license information.
-				printf '%s\n' "# Generated by $script_name $geo_nft_ver" > $cc_dir/$line.ipv6
-				printf '%s\n' "# $(date)" >> $cc_dir/$line.ipv6
-				printf '%s\n' "# IP Geolocation by DB-IP  https://db-ip.com  Licensed under" >> $cc_dir/$line.ipv6
-				printf '%s\n' "# (CC BY-SA 4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode" >> $cc_dir/$line.ipv6
+				printf '%s\n' "# Generated by $script_name $geo_nft_ver" > "$cc_dir/$line.ipv6"
+				printf '%s\n' "# $(date)" >> "$cc_dir/$line.ipv6"
+				printf '%s\n' "# IP Geolocation by DB-IP  https://db-ip.com  Licensed under" >> "$cc_dir/$line.ipv6"
+				printf '%s\n' "# (CC BY-SA 4.0) https://creativecommons.org/licenses/by-sa/4.0/legalcode" >> "$cc_dir/$line.ipv6"
 
 				# Add the element count and country code used to create this set.
-				printf '%s\n' "# Country code used to create this set: $line" >> $cc_dir/$line.ipv6
-				printf '%s\n\n' "# Number of elements in this set: $element_count6" >> $cc_dir/$line.ipv6
-				printf '%s\n' "define $line.ipv6 = {" >> $cc_dir/$line.ipv6
+				printf '%s\n' "# Country code used to create this set: $line" >> "$cc_dir/$line.ipv6"
+				printf '%s\n\n' "# Number of elements in this set: $element_count6" >> "$cc_dir/$line.ipv6"
+				printf '%s\n' "define $line.ipv6 = {" >> "$cc_dir/$line.ipv6"
 
 				# Grep the geolocation database file for country code matches for the current $line.
 				# If the starting and ending IP address are equal, list them as a single address for nftables compatibility.
-				grep $line $dbip_csv | grep : | \
+				grep "$line" "$dbip_csv" | grep : | \
 					awk -F"," '{ if ($1==$2) print "\t" $1 ","; else print "\t" $1 "-" $2 "," fi }' | \
-						sed '$s/,$//' >> $cc_dir/$line.ipv6
+						sed '$s/,$//' >> "$cc_dir/$line.ipv6"
 
 				# Add the closing brace to the output file.
-				printf '%s' "}" >> $cc_dir/$line.ipv6
+				printf '%s' "}" >> "$cc_dir/$line.ipv6"
 			done
 
 			if [ "$enable_include_all" = "yes" ]; then
@@ -592,7 +597,7 @@ make_sets_db() {
 				printf "%s\n" "${include_all6_array[@]}" > "$include_file6"
 			fi
 		else
-			rm -f $cc_dir/*.ipv6
+			rm -f "$cc_dir"/*.ipv6
 			rm -f "$include_file6"
 		fi
 		print_line "\n" "Country set creation complete..." "\n"
@@ -636,11 +641,11 @@ main() {
 	check_protocol
 
 	# Verify that the base directory exists and is writable.
-	check_dir $base_dir
+	check_dir "$base_dir"
 
 	# Verify that the countrysets directory exists and is writable. Create the directory
 	# if it doesn't exist.
-	check_dir $cc_dir -c
+	check_dir "$cc_dir" -c
 
 	# Checks are complete so download the geolocation database.
 	download_db
@@ -688,4 +693,3 @@ main() {
 main "$@"
 
 exit 0
-
