@@ -15,8 +15,8 @@
 # https://github.com/wirefalls/geo-nft
 # https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 #
-# This script requires write access to /etc and the install directory,
-# (base_dir) which by default is: /etc/nftables/geo-nft.
+# This script requires write access to /etc, /var/log and the install
+# directory (base_dir), which by default is: /etc/nftables/geo-nft.
 #
 # Supply the -s command line argument to silence verbose output.
 #======================================================================
@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.1.0
+geo_nft_ver=v2.2.0
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -33,7 +33,7 @@ script_name="geo-nft.sh"
 geo_conf="/etc/geo-nft.conf"
 
 # Error log filename. This file logs errors in addition to the systemd Journal.
-errorlog="/etc/geo-nft-error.log"
+errorlog="/var/log/geo-nft-error.log"
 
 # Geolocation database filename.
 dbip_filename="dbip-country-lite-$(date +%Y-%m).csv"
@@ -106,7 +106,7 @@ error_log() {
 			mv -f $errorlog "$errorlog.old"
 		fi
 		# Write error messages to the error log file.
-		printf '%s\n' "[$datetime]" >> $errorlog
+		printf '%s\n' "[$datetime] - $base_dir/$script_name:" >> $errorlog
 		print_line "\n" "$script_name $geo_nft_ver:" "\n"
 		for err in "$@"
 		do
