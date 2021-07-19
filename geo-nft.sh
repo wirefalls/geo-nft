@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.0
+geo_nft_ver=v2.2.1
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -160,14 +160,16 @@ make_config() {
 	printf '%s\n' "# Be aware that enabling this may break established" >> "$geo_conf"
 	printf '%s\n' "# connections between your system and other computers," >> "$geo_conf"
 	printf '%s\n' "# such as ssh sessions, connections to websites, etc." >> "$geo_conf"
-	printf '%s\n' "# Workstations typically set to yes; servers set to no." >> "$geo_conf"
+	printf '%s\n' "# It's recommended to set this to 'no' for most use" >> "$geo_conf"
+	printf '%s\n' "# cases to allow increased error checking provided by" >> "$geo_conf"
+	printf '%s\n' "# setting 'enable_refill' to yes below." >> "$geo_conf"
 	printf '%s\n' "# If you set this to yes then set enable_refill to no." >> "$geo_conf"
 	printf '%s\n' "restart_nftables=$restart_nftables" >> "$geo_conf"
 	printf '\n' >> "$geo_conf"
 	printf '%s\n' "# Enable geolocation sets to be flushed and refilled after" >> "$geo_conf"
 	printf '%s\n' "# the periodic database update (yes/no). Only enable" >> "$geo_conf"
-	printf '%s\n' "# this after manually testing the refill script defined" >> "$geo_conf"
-	printf '%s\n' "# in the next setting below." >> "$geo_conf"
+	printf '%s\n' "# this after manually testing the refill-sets.nft script" >> "$geo_conf"
+	printf '%s\n' "# as described in the User Guide." >> "$geo_conf"
 	printf '%s\n' "# If you set this to yes then set restart_nftables to no." >> "$geo_conf"
 	printf '%s\n' "enable_refill=$enable_refill" >> "$geo_conf"
 	printf '\n' >> "$geo_conf"
