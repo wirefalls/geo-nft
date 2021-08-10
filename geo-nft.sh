@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.1
+geo_nft_ver=v2.2.2
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -117,6 +117,17 @@ error_log() {
 		printf '\n' >> $errorlog
 	else
 		print_line "\n" "$script_name: The 'error_log' function needs at least one argument." "\n"
+	fi
+}
+
+# Verify the status of nftables
+check_nftables() {
+	nftables_status="$(systemctl is-active nftables.service)"
+	if [ "$nftables_status" = "inactive" ]; then
+		print_line "\n"
+		error_log "Nftables is not active. Verify that nftables is installed" \
+			"and running with: sudo systemctl status nftables" \
+			"Nftables can be restarted with: sudo systemctl restart nftables"
 	fi
 }
 
@@ -742,18 +753,25 @@ flush_refill_sets() {
 	# be set to "yes" for this to work. 
 	if [ "$enable_refill" = "yes" ]; then
 		if [ -n "$refill_file" ] && [ -s "$refill_file" ]; then
-			print_line "\n" "Refilling updated country-specific sets by running the script:" "\n"
-			print_line "$refill_file" "\n"
-			nft -f "$refill_file"
-			if [ $? -eq 0 ]; then
-				print_line "Refill successful." "\n"
+			if [ "$nftables_status" = "active" ]; then
+				print_line "\n" "Refilling updated country-specific sets by running the script:" "\n"
+				print_line "$refill_file" "\n"
+				nft -f "$refill_file"
+				if [ $? -eq 0 ]; then
+					print_line "Refill successful." "\n"
+				else
+					error_log "Refilling geolocation sets failed." \
+						"See 'systemctl status nftables' and 'journalctl -xe' for details."
+					exit 1
+				fi
 			else
-				error_log "Refilling sets failed." "See 'systemctl status nftables' and 'journalctl -xe' for details."
+				error_log "Unable to refill geolocation sets because nftables is not active, exiting..."
 				exit 1
 			fi
 		else
-			print_line "\n" "Unable to refill geolocation sets, refill script $base_dir/$refill_file not found." "\n"
-			print_line "Ensure file exists or set 'enable_refill=no' in $geo_conf." "\n"
+			error_log "Unable to refill geolocation sets, refill script $base_dir/$refill_file not found." \
+				"Ensure file exists or set 'enable_refill=no' in $geo_conf."
+			exit 1
 		fi
 	fi
 }
@@ -994,6 +1012,9 @@ main() {
 	# Verify that required programs are available.
 	check_programs
 
+	# Verify the status of nftables.
+	check_nftables
+
 	# Print the current date/time.
 	print_line "\n" "$(date)" "\n"
 
@@ -1030,7 +1051,9 @@ main() {
 
 	# Check the 'refill-sets.conf' file for user settings and create the 'refill_sets.nft' script if
 	# settings are valid.
-	check_refill_config
+	if [ "$nftables_status" = "active" ]; then
+		check_refill_config
+	fi
 
 	# Flush and refill updated geolocation sets by running the refill script defined by '$refill_file'
 	# above. The '$enable_refill' variable must be set to "yes" for this to work, and the
