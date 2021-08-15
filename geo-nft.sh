@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.2
+geo_nft_ver=v2.2.3
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -705,6 +705,10 @@ check_refill_config() {
 				# the 'refill-sets.nft' script.
 				print_line "No settings found. Skipping automatic generation of:" "\n" "$refill_file" "\n" \
 					"To use this feature configure settings in $refill_conf" "\n"
+				if [ "$enable_refill" = "yes" ]; then
+					print_line "The 'enable_refill' variable will be set to 'no' for this run." "\n"
+					enable_refill="no"
+				fi
 			elif [ "$no_line4" = "yes" ]; then
 				# No 'define-ipv4' lines were found in 'refill-sets.conf', even though enable_ipv4=yes,
 				# so skip the automatic generation of the 'refill-sets.nft' script.
@@ -744,6 +748,10 @@ check_refill_config() {
 	else
 		# The refill-sets.conf doesn't exist, so create it.
 		make_refill_config
+		if [ "$enable_refill" = "yes" ]; then
+			print_line "The 'enable_refill' variable will be set to 'no' for this run." "\n"
+			enable_refill="no"
+		fi
 	fi
 }
 
