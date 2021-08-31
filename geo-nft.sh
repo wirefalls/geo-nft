@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.5
+geo_nft_ver=v2.2.6
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -539,7 +539,8 @@ check_refill_config() {
 						nft list set "$table_family" "$table_name" "$set_name" > /dev/null 2>&1
 						if [ $? -ne 0 ]; then
 							error_log "The following 'define-ipv4' line in $refill_conf" \
-								"does not point to a valid nftables set:" "$line"
+								"does not point to a valid nftables set defined in your main ruleset (nftables.conf):" \
+								"$line"
 							bad_line="yes"
 							break
 						fi
@@ -629,7 +630,8 @@ check_refill_config() {
 						nft list set "$table_family" "$table_name" "$set_name" > /dev/null 2>&1
 						if [ $? -ne 0 ]; then
 							error_log "The following 'define-ipv6' line in $refill_conf" \
-								"does not point to a valid nftables set:" "$line"
+								"does not point to a valid nftables set defined in your main ruleset (nftables.conf):" \
+								"$line"
 							bad_line="yes"
 							break
 						fi
