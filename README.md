@@ -2,7 +2,7 @@
 
 ### Introduction
 
-&nbsp; &nbsp;***Geolocation for nftables*** is a Bash script to create nftables sets of country specific IP address ranges for use with firewall rulesets. The project provides a simple and flexible way to implement geolocation filtering with [nftables](https://netfilter.org/projects/nftables/).
+&nbsp; &nbsp;***Geolocation for nftables*** is a Bash script to create nftables sets of country specific IP address ranges for use with firewall rulesets. The project provides a simple and flexible way to implement geolocation filtering with [nftables](https://netfilter.org/projects/nftables/). It can be a useful tool to reduce the chance of malware, ransomware and phishing attempts as well as mitigating the effects of DDoS attacks.
 
 ### Features
 
@@ -41,13 +41,13 @@ nftables v0.9.0 or newer.
 awk, curl, grep, gunzip, sed, sort, stat  
 
 #### Discussions
-Please see our [Discussions Page](https://github.com/wirefalls/geo-nft/discussions) to share ideas or ask questions about the project.
+Please see our [Discussions Page](https://github.com/wirefalls/geo-nft/discussions) to ask for help, share ideas, or for questions about the project.
 
 #### Around the Web
 Feature Article - LinuxSecurity.com - [Geolocation for nftables Brings Simplicity & Flexibility to Geolocation Matching](https://linuxsecurity.com/features/features/geolocation-for-nftables)
 
 Slashdot.org - [Should You Block Connections to Your Network From Foreign Countries?](https://news.slashdot.org/story/21/02/13/2231248/should-you-block-connections-to-your-network-from-foreign-countries)
-&nbsp;
+
 ### License
 ***Geolocation for nftables*** is licensed under the [GNU GPLv2](./LICENSE) (or at your option, any later version).
 
