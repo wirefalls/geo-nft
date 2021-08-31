@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.4
+geo_nft_ver=v2.2.5
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -103,7 +103,7 @@ error_log() {
 		# If the error log has more than 50 lines then rotate it.
 		if [ -s "$errorlog" ] && [ "$(awk 'END{print NR}' $errorlog)" -ge 50 ]; then
 			print_line "\n" "Rotating error log $errorlog" "\n"
-			mv -f $errorlog "$errorlog.old"
+			mv -f $errorlog "$errorlog.1"
 		fi
 		# Write error messages to the error log file.
 		printf '%s\n' "[$datetime] - $base_dir/$script_name:" >> $errorlog
