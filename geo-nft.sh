@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.6
+geo_nft_ver=v2.2.7
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -59,26 +59,6 @@ do
 		printf "\n%s\n" "Command line argument invalid: $val"
 	fi
 done
-
-# Set user settings to default values.
-set_defaults() {
-	# Enable ipv4 support ("yes" or "no").
-	enable_ipv4="yes"
-
-	# Enable ipv6 support ("yes" or "no").
-	enable_ipv6="yes"
-
-	# Enable restarting nftables after a database update ("yes" or "no").
-	restart_nftables="no"
-
-	# Enable sets to be flushed/refilled after updating the geolocation database ("yes" or "no").
-	enable_refill="no"
-
-	# Create the include-all.ipv4 and/or include-all.ipv6 files to allow loading
-	# all geolocation set files at once for older versions of nftables ("yes" or "no").
-	# Works with all versions of nftables, but needed with nftables <= 0.9.3
-	enable_include_all="yes"
-}
 
 # Print script messages to the screen when script is run manually.
 # Output can be silenced with the -s argument when run as a service.
@@ -429,6 +409,27 @@ print_notice() {
 			"$refill_conf with:" "\n" \
 			"include \"$include_file4\"" "\n" \
 			"include \"$include_file6\"" "\n"
+}
+
+# Set user settings to default values.
+set_defaults() {
+	# Enable ipv4 support ("yes" or "no").
+	enable_ipv4="yes"
+
+	# Enable ipv6 support ("yes" or "no").
+	enable_ipv6="yes"
+
+	# Enable restarting nftables after a database update ("yes" or "no").
+	restart_nftables="no"
+
+	# Enable sets to be flushed/refilled after updating the geolocation database ("yes" or "no").
+	enable_refill="no"
+
+	# Enable creation of the include-all.ipv4 and/or include-all.ipv6 files to allow loading
+	# all geolocation set files at once on older versions of nftables. Set to 'no' if
+	# running a version of nftables >= v0.9.4
+	version_atleast $(nft -v | awk '{gsub(/[^0-9.]/, "", $2); print $2}') "0.9.4" && \
+	enable_include_all="no" || enable_include_all="yes"
 }
 
 # Auto-generate the nftables script 'refill-sets.nft' from settings in
@@ -1040,7 +1041,7 @@ main() {
 	# Set user default settings.
 	set_defaults
 
-	#Read user settings from the /etc/geo-nft.conf file, otherwise use defaults.
+	# Read user settings from the /etc/geo-nft.conf file, otherwise use defaults.
 	check_config
 
 	# Verify at least one of the variables 'enable_ipv4' or 'enable_ipv6' is set to 'yes'.
