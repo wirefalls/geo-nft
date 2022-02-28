@@ -33,7 +33,7 @@ Please see the [Wiki](https://github.com/wirefalls/geo-nft/wiki/Home) for the la
 The [Installation Guide](https://github.com/wirefalls/geo-nft/wiki/Installation-Guide) has detailed installation instructions to get you up and running.
 
 #### Usage
-The [User Guide](https://github.com/wirefalls/geo-nft/wiki/User-Guide) explains how to configure your ruleset for geolocation filtering.
+The [User Guide](https://github.com/wirefalls/geo-nft/wiki/User-Guide) explains how to configure your ruleset for geolocation filtering. The Guide now contains a [troubleshooting section](https://github.com/wirefalls/geo-nft/wiki/User-Guide#troubleshooting) to ease setup.
 
 #### Dependencies
 Bash 4.0 or newer.  
@@ -67,7 +67,7 @@ Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspber
 Photos used to create the header image courtesy of [NASA Visible Earth](https://visibleearth.nasa.gov).  
 All trademarks, logos and copyrights are the property of their respective owners.  
 
-### References
+### Resources
 
 https://netfilter.org/projects/nftables/  
 https://wiki.nftables.org/wiki-nftables/index.php/Main_Page  
@@ -75,4 +75,6 @@ http://netfilter.org/mailinglists.html#ml-user
 https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2  
 https://db-ip.com/db/lite.php  
 https://db-ip.com/faq.php  
+https://linuxsecurity.com/  
+https://wiki.archlinux.org/title/Nftables  
 https://unstats.un.org/unsd/methodology/m49/overview  

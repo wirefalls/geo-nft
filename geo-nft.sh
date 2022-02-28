@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.7
+geo_nft_ver=v2.2.8
 
 # Filename of this script.
 script_name="geo-nft.sh"
