@@ -44,7 +44,7 @@ awk, curl, grep, gunzip, sed, sort, stat
 Please see our [Discussions Page](https://github.com/wirefalls/geo-nft/discussions) to ask for help, share ideas, or for questions about the project.
 
 #### Around the Web
-Feature Article - LinuxSecurity.com - [Geolocation for nftables Brings Simplicity & Flexibility to Geolocation Matching](https://linuxsecurity.com/features/features/geolocation-for-nftables)
+Feature Article - LinuxSecurity.com - [Geolocation for nftables Brings Simplicity & Flexibility to Geolocation Matching](https://linuxsecurity.com/features/geolocation-for-nftables)
 
 Slashdot.org - [Should You Block Connections to Your Network From Foreign Countries?](https://news.slashdot.org/story/21/02/13/2231248/should-you-block-connections-to-your-network-from-foreign-countries)
 

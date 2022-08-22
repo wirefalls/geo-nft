@@ -24,7 +24,7 @@
 # Standard script variables.
 
 # Semantic version number of this script.
-geo_nft_ver=v2.2.8
+geo_nft_ver=v2.2.9
 
 # Filename of this script.
 script_name="geo-nft.sh"
@@ -553,6 +553,23 @@ check_refill_config() {
 							# Capitalize the country code.
 							cc="$(awk '{print toupper($0)}' <<<"$cc")"
 
+							# Test if the country code is blank.
+							if [ -z "$cc" ]; then
+								error_log "There's a blank country code in your 'define-ipv4' line in $refill_conf." \
+									"Remove the blank country code from the line shown below. The blank entry will be skipped." \
+									"Bad line: $line"
+								continue
+							fi
+
+							# Test if the country code is already in the array (country code repeated in refill-sets.conf list).
+							if [[ "${cc4_array[*]}" =~ (^|[^[:alpha:]])$cc([^[:alpha:]]|$) ]]; then
+							#if [[ -v $cc4_array[$cc] ]]; then
+								error_log "Country code '$cc' is duplicated in your 'define-ipv4' line in $refill_conf." \
+									"Remove any duplicates from the line shown below. The duplicate entry will be skipped." \
+									"Bad line: $line"
+								continue
+							fi
+
 							# Verify that the country code definition file exists in the countrysets directory.
 							if [ -s "$cc_dir/$cc.ipv4" ]; then
 								cc4_array+=("\$$cc.ipv4")
@@ -562,6 +579,7 @@ check_refill_config() {
 									"The missing country code was not added to the set." \
 									"Line: $line"
 								cc_line="yes"
+								continue
 							fi
 						done <<<"$country_codes"
 
@@ -644,6 +662,22 @@ check_refill_config() {
 							# Capitalize the country code.
 							cc="$(awk '{print toupper($0)}' <<<"$cc")"
 
+							# Test if the country code is blank.
+							if [ -z "$cc" ]; then
+								error_log "There's a blank country code in your 'define-ipv6' line in $refill_conf." \
+									"Remove the blank country code from the line shown below. The blank entry will be skipped." \
+									"Bad line: $line"
+								continue
+							fi
+
+							# Test if the country code is already in the array (country code repeated in refill-sets.conf list).
+							if [[ "${cc6_array[*]}" =~ (^|[^[:alpha:]])$cc([^[:alpha:]]|$) ]]; then
+								error_log "Country code $cc is duplicated in your 'define-ipv6' line in $refill_conf." \
+									"Remove any duplicates from the line shown below. The duplicate entry will be skipped." \
+									"Bad line: $line"
+								continue
+							fi
+
 							# Verify that the country code definition file exists in the countrysets directory.
 							if [ -s "$cc_dir/$cc.ipv6" ]; then
 								cc6_array+=("\$$cc.ipv6")
@@ -653,6 +687,7 @@ check_refill_config() {
 									"The missing country code was not added to the set." \
 									"Line: $line"
 								cc_line="yes"
+								continue
 							fi
 						done <<<"$country_codes"
 
