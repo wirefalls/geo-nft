@@ -442,6 +442,7 @@ check_refill_config() {
 
 		# find nft bin
 		nft="$(which nft)"
+		print_line "Found 'nft' in $(dirname "${nft}")" "\n"
 		# Create an array to store the output that will be written to the refill-sets.nft script.
 		local refill_sets_array=("#!${nft} -f")
 		refill_sets_array+=("")
